@@ -75,7 +75,9 @@ while True:
                 else:
                     GPIO.output(LedY, GPIO.LOW)
                     Zeitdauer = (time.clock()-Startzeit)
-
+        Startzeit = 0
+        Zeitdauer = 0
+                 
 # Bisher Probleme/ was fehlt: Das Programm funktioniert nur einmal, danach
 # reagiert es auf den Startknopf nichtmehr. EIn Highscore wird noch nicht gezählt,
 # kein Buzzer drin, kein Led Ring oder 7-Segment-Anzeige. Die Buttons simulieren
