@@ -28,7 +28,6 @@ GPIO.setup(Lichtschranke, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(Kartenleser, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 #GPIO.add_event_detect(Start_Button, GPIO.RISING,callback)<--ignorieren
-
 #Variablen:
 Startzeit = 0
 Zeitlimit = 20
@@ -38,46 +37,46 @@ Zeitdauer = 0
 # Endlosschleife
 while True:
     GPIO.output(LedW, GPIO.HIGH)
-    
-    if GPIO.input(Start_Button) == 1:        
-        GPIO.output(LedW, GPIO.LOW)# Ausschalten, optional: countdown+buzzer    
-        #Zeit starten:
-        Startzeit = time.clock()
-        while Zeitdauer <= Zeitlimit:
-            x = random.randint(1,4)
+    GPIO.wait_for_edge(Start_Button, GPIO.RISING)
+   #if GPIO.input(Start_Button) == 1:       
+    GPIO.output(LedW, GPIO.LOW)# Ausschalten, optional: countdown+buzzer    
+    #Zeit starten:
+    Startzeit = time.clock()
+    while Zeitdauer <= Zeitlimit:
+        x = random.randint(1,4)
             
-            if x == 1 :
-                GPIO.output(LedR, GPIO.HIGH)
-                while GPIO.input(Joystick) == 0:
-                    #Zeit messen:
-                    Zeitdauer = (time.clock()-Startzeit)
-                else:
-                    GPIO.output(LedR, GPIO.LOW)
-                    Zeitdauer = (time.clock()-Startzeit)
+        if x == 1 :
+            GPIO.output(LedR, GPIO.HIGH)
+            while GPIO.input(Joystick) == 0:
+                #Zeit messen:
+                Zeitdauer = (time.clock()-Startzeit)
+            else:
+                GPIO.output(LedR, GPIO.LOW)
+                Zeitdauer = (time.clock()-Startzeit)
                     
-            elif x == 2 :
-                GPIO.output(LedG, GPIO.HIGH)
-                while GPIO.input(Lichtschranke) == 0:
+        elif x == 2 :
+            GPIO.output(LedG, GPIO.HIGH)
+            while GPIO.input(Lichtschranke) == 0:
                     Zeitdauer = (time.clock()-Startzeit)
-                else:
-                    GPIO.output(LedG, GPIO.LOW)
-                    Zeitdauer = (time.clock()-Startzeit)
+            else:
+                GPIO.output(LedG, GPIO.LOW)
+                Zeitdauer = (time.clock()-Startzeit)
                     
-            elif x == 3 :
-                GPIO.output(LedB, GPIO.HIGH)
-                while GPIO.input(Keypad) == 0:
-                    Zeitdauer = (time.clock()-Startzeit)
-                else:
-                    GPIO.output(LedB, GPIO.LOW)
-                    Zeitdauer = (time.clock()-Startzeit)
+        elif x == 3 :
+            GPIO.output(LedB, GPIO.HIGH)
+            while GPIO.input(Keypad) == 0:
+                Zeitdauer = (time.clock()-Startzeit)
+            else:
+                GPIO.output(LedB, GPIO.LOW)
+                Zeitdauer = (time.clock()-Startzeit)
                     
-            elif x == 4 :
-                GPIO.output(LedY, GPIO.HIGH)
-                while GPIO.input(Kartenleser) == 0:
-                    Zeitdauer = (time.clock()-Startzeit)
-                else:
-                    GPIO.output(LedY, GPIO.LOW)
-                    Zeitdauer = (time.clock()-Startzeit)
+        elif x == 4 :
+            GPIO.output(LedY, GPIO.HIGH)
+            while GPIO.input(Kartenleser) == 0:
+                Zeitdauer = (time.clock()-Startzeit)
+            else:
+                GPIO.output(LedY, GPIO.LOW)
+                Zeitdauer = (time.clock()-Startzeit)
 
 # Bisher Probleme/ was fehlt: Das Programm funktioniert nur einmal, danach
 # reagiert es auf den Startknopf nichtmehr. EIn Highscore wird noch nicht gezählt,
