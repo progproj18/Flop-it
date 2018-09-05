@@ -33,6 +33,8 @@ GPIO.setup(Kartenleser, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 Startzeit = 0
 Zeitlimit = 20
 Zeitdauer = 0
+#Funktionen
+
 # Endlosschleife
 while True:
     GPIO.output(LedW, GPIO.HIGH)
