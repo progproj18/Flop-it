@@ -1,9 +1,10 @@
 
 import RPi.GPIO as GPIO
 import time
+import timmeit
 import random
-import tm1637_1
-import Joystick_Funktion
+import tm1637
+#import Joystick_Funktion
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD) #Pinnummern, alternativ GPIO.BCM für GPIO-Nummerierung
@@ -36,7 +37,7 @@ Zeitdauer = 0
 Punktestand = 0
 Zehner=0
 GPIO.output(LedW, GPIO.LOW)
-#GPIO.output(18, GPIO.LOW)
+
 #Funktionen
 
 # Endlosschleife
@@ -44,7 +45,7 @@ while True:
     if GPIO.input(Lichtschranke) == 0:
         print ("an")
 
-    Display = tm1637_1.TM1637(23,24,2) #2 entspricht helligkeit
+    Display = tm1637.TM1637(23,24,2) #2 entspricht helligkeit
     
     #anzeige = [1,2,3,4]
     #Display.Show(anzeige)
@@ -71,36 +72,38 @@ while True:
     Display.Clear()
     GPIO.output(LedW, GPIO.LOW)# Ausschalten, optional: countdown+buzzer    
     #Zeit starten:
-    Startzeit = time.clock()
+    Startzeit = timeit.default_timer()
     while Zeitdauer <= Zeitlimit:
         x = random.randint(1,4)
             
         if x == 1 :
             GPIO.output(LedR, GPIO.HIGH)
-            while GPIO.input(Joystick) == 0 and Zeitdauer <= Zeitlimit:
+            #Colour = Joystick_Funktion.RGB
+            import Joystick_Funktion
+            #while GPIO.input(Joystick) == 0 and Zeitdauer <= Zeitlimit:
                 #Zeit messen:
-                Zeitdauer = (time.clock()-Startzeit)
-            else:
-                GPIO.output(LedR, GPIO.LOW)
-                Zeitdauer = (time.clock()-Startzeit)
-                if Zeitdauer <= Zeitlimit:
-                    Punktestand = Punktestand+1
+                #Zeitdauer = (time.clock()-Startzeit)
+            #else:
+            GPIO.output(LedR, GPIO.LOW)
+            Zeitdauer = (timeit.default_timer()-Startzeit)
+            if Zeitdauer <= Zeitlimit:
+                Punktestand = Punktestand+1
                 
-                if Punktestand > 9:
-                    Punktestand =0
-                    Zehner=Zehner+1
-                    Display.Show1(3, Punktestand)
-                    Display.Show1(2, Zehner)
-                Display.Show1(3,Punktestand)
+            if Punktestand > 9:
+                Punktestand =0
+                Zehner=Zehner+1
+                Display.Show1(3, Punktestand)
                 Display.Show1(2, Zehner)
+            Display.Show1(3,Punktestand)
+            Display.Show1(2, Zehner)
                     
         elif x == 2 :
             GPIO.output(LedG, GPIO.HIGH)
             while GPIO.input(Lichtschranke) == 0 and Zeitdauer <= Zeitlimit:
-                    Zeitdauer = (time.clock()-Startzeit)
+                    Zeitdauer = (timeit.default_timer()-Startzeit)
             else:
                 GPIO.output(LedG, GPIO.LOW)
-                Zeitdauer = (time.clock()-Startzeit)
+                Zeitdauer = (timeit.default_timer()-Startzeit)
                 if Zeitdauer <= Zeitlimit:
                     Punktestand = Punktestand+1
                 
@@ -115,10 +118,10 @@ while True:
         elif x == 3 :
             GPIO.output(LedB, GPIO.HIGH)
             while GPIO.input(Keypad) == 0 and Zeitdauer <= Zeitlimit:
-                Zeitdauer = (time.clock()-Startzeit)
+                Zeitdauer = (timeit.default_timer()-Startzeit)
             else:
                 GPIO.output(LedB, GPIO.LOW)
-                Zeitdauer = (time.clock()-Startzeit)
+                Zeitdauer = (timeit.default_timer()-Startzeit)
                 if Zeitdauer <= Zeitlimit:
                     Punktestand = Punktestand+1
                 
@@ -133,10 +136,10 @@ while True:
         elif x == 4 :
             GPIO.output(LedY, GPIO.HIGH)
             while GPIO.input(Kartenleser) == 0 and Zeitdauer <= Zeitlimit:
-                Zeitdauer = (time.clock()-Startzeit)
+                Zeitdauer = (timeit.default_timer()-Startzeit)
             else:
                 GPIO.output(LedY, GPIO.LOW)
-                Zeitdauer = (time.clock()-Startzeit)
+                Zeitdauer = (timeit.default_timer()-Startzeit)
                 if Zeitdauer <= Zeitlimit:
                     Punktestand = Punktestand+1
                 
