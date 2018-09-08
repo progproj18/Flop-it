@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import random
 import tm1637_1
+import Joystick_Funktion
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD) #Pinnummern, alternativ GPIO.BCM für GPIO-Nummerierung
@@ -37,11 +38,7 @@ Zehner=0
 GPIO.output(LedW, GPIO.LOW)
 #GPIO.output(18, GPIO.LOW)
 #Funktionen
-def my_callback(channel):
-    Punktestand =0
-    Zehner=Zehner+1
-    Display.Show1(3, Punktestand)
-    Display.Show1(2, Zehner)
+
 # Endlosschleife
 while True:
     if GPIO.input(Lichtschranke) == 0:
