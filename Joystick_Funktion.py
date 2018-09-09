@@ -8,7 +8,7 @@ import random
 
 # Open SPI bus
 spi = spidev.SpiDev()
-spi.open(0, 0)
+spi.open(0, 1)
 spi.max_speed_hz=1000
  
 # Define sensor channels (3 to 7 are unused)
