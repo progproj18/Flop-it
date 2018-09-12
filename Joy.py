@@ -10,7 +10,7 @@ GPIO.setwarnings(False)
 # Open SPI bus
 spi = spidev.SpiDev()
 spi.open(0, 1)
-spi.max_speed_hz=1000
+spi.max_speed_hz=100
              
 # Define sensor channels (3 to 7 are unused)
 mcp3008_switch_channel = 7
@@ -160,5 +160,6 @@ def Joys():
                 p.ChangeDutyCycle(0)
             print ("Korrekt!")
             x = x+1
+            time.sleep(0.5)
     except KeyboardInterrupt:
         pass
