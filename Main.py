@@ -47,7 +47,7 @@ GPIO.setup(Lichtschranke, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Variablen:
 Startzeit = 0
-Zeitlimit = 10
+Zeitlimit = 40
 Zeitdauer = 0
 Punktestand = 0
 Zehner=0
@@ -109,7 +109,7 @@ while True:
     #Zeit starten:
     Startzeit = timeit.default_timer()
     while Zeitdauer <= Zeitlimit:
-        x = random.randint(4,4)
+        x = random.randint(1,4)
             
         if x == 1 :
             GPIO.output(LedR, GPIO.HIGH)
