@@ -6,12 +6,9 @@ import tm1637
 import math
 import spidev
 import os
+import Reader
 
-# Open SPI bus
-spi = spidev.SpiDev()
-spi.open(0, 1)
-spi.max_speed_hz=1000
- 
+
 # Define sensor channels (3 to 7 are unused)
 mcp3008_switch_channel = 7
 mcp3008_x_voltage_channel = 6
@@ -50,11 +47,15 @@ GPIO.setup(Lichtschranke, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Variablen:
 Startzeit = 0
-Zeitlimit = 40
+Zeitlimit = 10
 Zeitdauer = 0
 Punktestand = 0
 Zehner=0
-
+#GPIO.output(LedW, GPIO.LOW)
+#GPIO.output(LedR, GPIO.LOW)
+#GPIO.output(LedG, GPIO.LOW)
+#GPIO.output(LedB, GPIO.LOW)
+#GPIO.output(LedY, GPIO.LOW)
 GPIO.setup([LedW,LedR, LedG, LedB, LedY], GPIO.OUT, initial=GPIO.LOW)
 #Funktionen
 red_led = 31
@@ -108,7 +109,7 @@ while True:
     #Zeit starten:
     Startzeit = timeit.default_timer()
     while Zeitdauer <= Zeitlimit:
-        x = random.randint(1,3)
+        x = random.randint(4,4)
             
         if x == 1 :
             GPIO.output(LedR, GPIO.HIGH)
@@ -400,22 +401,24 @@ while True:
                     
         elif x == 4 :
             GPIO.output(LedY, GPIO.HIGH)
-            while GPIO.input(Kartenleser) == 0 and Zeitdauer <= Zeitlimit:
-                Zeitdauer = (timeit.default_timer()-Startzeit)
-            else:
-                GPIO.output(LedY, GPIO.LOW)
+            #while GPIO.input(Kartenleser) == 0 and Zeitdauer <= Zeitlimit:
+            #Zeitdauer = (timeit.default_timer()-Startzeit)
+            Reader.reader()
+            #else:
+            GPIO.output(LedY, GPIO.LOW)
                 
                 #if Zeitdauer <= Zeitlimit:
-                Punktestand = Punktestand+1
+            Punktestand = Punktestand+1
                 
-                if Punktestand > 9:
-                    Punktestand =0
-                    Zehner=Zehner+1
-                    Display.Show1(3, Punktestand)
-                    Display.Show1(2, Zehner)
-                Display.Show1(3,Punktestand)
-                Display.Show1(2, Zehner)
-                Zeitdauer = (timeit.default_timer()-Startzeit)
+            if Punktestand > 9:
+                Punktestand =0
+                Zehner=Zehner+1
+                DisplayS.Show1(3, Punktestand)
+                DisplayS.Show1(2, Zehner)
+            DisplayS.Show1(3,Punktestand)
+            DisplayS.Show1(2, Zehner)
+            Zeitdauer = (timeit.default_timer()-Startzeit)
+            time.sleep(0.5)
     Startzeit = 0
     Zeitdauer = 0
     Punktestand = 0
@@ -426,5 +429,4 @@ while True:
 # kein Buzzer drin, kein Led Ring oder 7-Segment-Anzeige. Die Buttons simulieren
 # die Stationen und koennen u.U. spaeter durch Funktionen, die man aufruft
 # ersetzt werden(?)
-
 
