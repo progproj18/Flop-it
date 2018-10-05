@@ -46,20 +46,23 @@ def kp():
 
         while not input_correct:
             result = []
-            while len(result) < 4:
-                for j in range(3):
-                    GPIO.output(COL[j], 0)
+            def Check_die_Lage():
+                while len(result) < 4:
+                    for j in range(3):
+                        GPIO.output(COL[j], 0)
 
-                    for i in range(4):
-                        if GPIO.input(ROW[i]) == 0:
-                            time.sleep(0.02)
-                            result.extend([MATRIX[i][j]])
-                            print (result)
-                            while(GPIO.input(ROW[i]) == 0):
-                                  time.sleep(0.02)
+                        for i in range(4):
+                            if GPIO.input(ROW[i]) == 0:
+                                if j == 3 and i == 4:
+                                    return
+                                time.sleep(0.02)
+                                result.extend([MATRIX[i][j]])
+                                print (result)
+                                while(GPIO.input(ROW[i]) == 0):
+                                    time.sleep(0.02)
 
-                    GPIO.output(COL[j], 1)
-            input_correct = (result == Code)
+                        GPIO.output(COL[j], 1)
+                input_correct = (result == Code)
 
     # call function
     check_keypad()
