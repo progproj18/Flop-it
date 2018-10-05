@@ -78,8 +78,8 @@ def reader():
             # Check if authenticated
             if status == MIFAREReader.MI_OK:
                 MIFAREReader.MFRC522_Read(8)
-                #while nochda == status:
-                    #nochda = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+                while nochda == status:
+                    nochda = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
                     #print ("Hallo")
                 
                 MIFAREReader.MFRC522_StopCrypto1()
