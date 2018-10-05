@@ -31,7 +31,7 @@ Punktestand = 0
 Zehner=0
 
 DisplayS = tm1637.TM1637(38,40,2) #2 entspricht Helligkeit
-
+DisplayS.Clear()
 #Funktionen
 def Score():
     Punktestand = Punktestand+1
@@ -39,7 +39,7 @@ def Score():
         Punktestand =0
         Zehner=Zehner+1
     DisplayS.Show1(3,Punktestand)
-    DisplayS.Show1(2, Zehner)
+    DisplayS.Show1(2, Zehner)               #return nötig?
      
 # Endlosschleife
 while True:
@@ -76,11 +76,13 @@ while True:
             GPIO.output(LedG, GPIO.HIGH)
             while GPIO.input(Lichtschranke) == 0 and Zeitdauer <= Zeitlimit:
                 Zeitdauer = (timeit.default_timer()-Startzeit)
-            else:
-                GPIO.output(LedG, GPIO.LOW)
-                Score()
+            #else:
+            while GPIO.input(Lichtschranke) == 1 and Zeitdauer <= Zeitlimit:
                 Zeitdauer = (timeit.default_timer()-Startzeit)
-                time.sleep(1)                                                #?
+            GPIO.output(LedG, GPIO.LOW)
+            Score()
+            Zeitdauer = (timeit.default_timer()-Startzeit)
+            time.sleep(1)                                                #?
         elif x == 3 :
             GPIO.output(LedB, GPIO.HIGH)
             Joy.Joys()       
