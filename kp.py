@@ -68,3 +68,4 @@ def kp():
     # call function
     check_keypad()
     Display.Clear()
+#kp()
