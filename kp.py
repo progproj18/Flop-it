@@ -63,6 +63,7 @@ def kp():
 
                         GPIO.output(COL[j], 1)
                 input_correct = (result == Code)
+            Check_die_Lage()
 
     # call function
     check_keypad()
