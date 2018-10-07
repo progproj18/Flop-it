@@ -74,6 +74,7 @@ while True:
                     
         elif x == 2 :
             GPIO.output(LedG, GPIO.HIGH)
+            #wait_for_edge(Lichtschranke,GPIO.RISING)
             while GPIO.input(Lichtschranke) == 0 and Zeitdauer <= Zeitlimit:
                 Zeitdauer = (timeit.default_timer()-Startzeit)
             #else:
