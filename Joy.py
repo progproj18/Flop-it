@@ -1,3 +1,8 @@
+# Quelle: https://grantwinney.com/connecting-an-analog-joystick-to-the-raspberry-pi-and-using-it-with-an-rgb-led-to-simulate-a-color-wheel/
+
+# ab hier Zitat, auskommentierte Prints wurden nicht extra markiert, anders belegte Pinnumern ebenfalls nicht
+
+#---------------------------------------------------------------------------------------------------------------------------
 import math
 import RPi.GPIO as GPIO
 import spidev
@@ -29,9 +34,9 @@ pwm_r = GPIO.PWM(red_led, 300)
 pwm_g = GPIO.PWM(green_led, 300)
 pwm_b = GPIO.PWM(blue_led, 300)
                 
-
-def Joys():  
-    
+#---------------------------------------------------------------------------------------------------------------------------
+def Joys():    # allumfassende Funktion
+#---------------------------------------------------------------------------------------------------------------------------    
     def read_spi_data_channel(channel):
         
                 
@@ -102,9 +107,9 @@ def Joys():
              
         dx = math.fabs(x - center_x_pos)
         dy = math.fabs(y - center_y_pos)
-        return dx < 20 and dy < 20
-             
-
+#---------------------------------------------------------------------------------------------------------------------------
+        return dx < 35 and dy < 35                      # der Toleranzbereich musste vergroeßert werden (von 20--> 35), gegen Flackern der LED
+#---------------------------------------------------------------------------------------------------------------------------
 
     """
     Initializes GPIO and PWM, then sets up a loop to continually read the joystick position and calculate the next set
@@ -117,49 +122,45 @@ def Joys():
              
     for p in pwm_instances:
         p.start(0)
-                    
+#---------------------------------------------------------------------------------------------------------------------------
     angle = 0
     x = 0
     try:
-        for x in range(1):
-            Zufallswinkel = random.randint(0,359)
+        for x in range(1):                                       # fuer den Fall, dass mehrere Durchlauufe erwuenscht sind
+            Zufallswinkel = random.randint(0,359)                # Bestimmung Zufallswinkel + entsprechende Farbe der Led
             r = calculate_next_pwm_duty_cycle_for_led(Zufallswinkel, 'R')
             g = calculate_next_pwm_duty_cycle_for_led(Zufallswinkel, 'G')
             b = calculate_next_pwm_duty_cycle_for_led(Zufallswinkel, 'B')
                     
-            while angle < (Zufallswinkel-1) or angle > (Zufallswinkel+1):
-                # If joystick switch is pressed down, turn off LEDs
+            while angle < (Zufallswinkel-1) or angle > (Zufallswinkel+1):   # Auslesen des Joysticks und Pruefen auf Position (bzgl. Zufallswinkels)
+                                                                            # mit 1° Toleranz
+ #---------------------------------------------------------------------------------------------------------------------------
                 switch = read_spi_data_channel(mcp3008_switch_channel)
                             
-                if switch == 0:
+                if switch == 0:                                             # switch gedrueckt --> Led aus
                     for p in pwm_instances:
                         p.ChangeDutyCycle(0)
                     continue
-             
-                # Read the joystick position data
-                x_pos = read_spi_data_channel(mcp3008_x_voltage_channel)
+#---------------------------------------------------------------------------------------------------------------------------             
+                x_pos = read_spi_data_channel(mcp3008_x_voltage_channel)    # Joystick auslesen, x-/y-Position
                 y_pos = read_spi_data_channel(mcp3008_y_voltage_channel)
              
-                # If joystick is at rest in center, turn on all LEDs at max
-                if is_joystick_near_center(x_pos, y_pos, center_x_pos, center_y_pos):
+                if is_joystick_near_center(x_pos, y_pos, center_x_pos, center_y_pos):  # Wenn Joystick in Ruhelage, LED leuchtet in Zufallsfarbe
                     pwm_r.ChangeDutyCycle(r)
                     pwm_g.ChangeDutyCycle(g)
                     pwm_b.ChangeDutyCycle(b)
-                    #for p in pwm_instances:
-                        #p.ChangeDutyCycle(100)
                     continue
                         
-                # Adjust duty cycle of LEDs based on joystick position
-                angle = convert_coordinates_to_angle(x_pos, y_pos, center_x_pos, center_y_pos)
+                angle = convert_coordinates_to_angle(x_pos, y_pos, center_x_pos, center_y_pos)  # Umsetzen der Joystickposition in Led-Farbe
                 pwm_r.ChangeDutyCycle(calculate_next_pwm_duty_cycle_for_led(angle, 'R'))
                 pwm_g.ChangeDutyCycle(calculate_next_pwm_duty_cycle_for_led(angle, 'G'))
                 pwm_b.ChangeDutyCycle(calculate_next_pwm_duty_cycle_for_led(angle, 'B'))
-             
-                #print("Position : ({},{})  --  Angle : {}".format(x_pos, y_pos, round(angle, 2)))
+
             for p in pwm_instances:
-                p.ChangeDutyCycle(0)
+                p.ChangeDutyCycle(0)                   # Led aus
             print ("Korrekt!")
             x = x+1
             time.sleep(0.5)
+#---------------------------------------------------------------------------------------------------------------------------
     except KeyboardInterrupt:
         pass
