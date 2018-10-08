@@ -1,3 +1,8 @@
+# Quelle: https://github.com/mxgxw/MFRC522-python/blob/master/Read.py
+
+# ab hier Zitat, auskommentierte Prints wurden nicht extra markiert
+
+#---------------------------------------------------------------------------------------------------------------------------
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
@@ -24,8 +29,9 @@
 import RPi.GPIO as GPIO
 import MFRC522
 import signal
-
-def reader():
+#-------------------------------------------------------------------------------------------------------------------
+def reader():       # eine Funktion um alles herum, die nur aufgerufen werden muss
+#-------------------------------------------------------------------------------------------------------------------
     continue_reading = True
 
     # Capture SIGINT for cleanup when the script is aborted
@@ -53,7 +59,9 @@ def reader():
         
         # If a card is found
         if status == MIFAREReader.MI_OK:
-            nochda = status
+#----------------------------------------------------------------------------------------------------------------------------
+            nochda = status                                           #speichert den Status in nochda für später
+#----------------------------------------------------------------------------------------------------------------------------
             
             #print ("Card detected")
         
@@ -78,12 +86,16 @@ def reader():
             # Check if authenticated
             if status == MIFAREReader.MI_OK:
                 MIFAREReader.MFRC522_Read(8)
+#-------------------------------------------------------------------------------------------------------------------
                 while nochda == status:
-                    nochda = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+                    nochda = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)       # diese Schleife sorgt dafür, dass das Programm erst weiter läuft, 
+                                                                                                       # wenn der Chip nichtmehr in der Nähe ist
                     #print ("Hallo")
-                
+#-------------------------------------------------------------------------------------------------------------------                
                 MIFAREReader.MFRC522_StopCrypto1()
-                continue_reading = False
+#-------------------------------------------------------------------------------------------------------------------
+                continue_reading = False                                                               # endet Schleife
+#-------------------------------------------------------------------------------------------------------------------
 
             else:
                 print ("Authentication error")
