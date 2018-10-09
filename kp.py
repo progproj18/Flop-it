@@ -1,4 +1,4 @@
-# Quelle: https://www.youtube.com/watch?v=yYnX5QodqQ4, integer =/ Liste 
+# Quelle: https://www.youtube.com/watch?v=yYnX5QodqQ4
 # ab hier Zitat, auskommentierte Prints wurden nicht extra markiert
 #---------------------------------------------------------------------------------------------------------------------------
 import RPi.GPIO as GPIO
@@ -14,7 +14,7 @@ GPIO.setwarnings(False)
 Display = tm1637.TM1637(3,5,2)
 Display.Clear()
 #---------------------------------------------------------------------------------------------------------------------------
-def kp():
+def kp():                                        # eine Funktion um alles herum, die nur aufgerufen werden muss
 #---------------------------------------------------------------------------------------------------------------------------
     Code = []
     for _ in range(4):
@@ -47,24 +47,25 @@ def kp():
  #---------------------------------------------------------------------------------------------------------------------------       
         input_correct = False
 
-        while not input_correct:
+        while not input_correct:                                                          #Schleife läuft, solange die Eingabe falsch ist
             result = []
-            while len(result) < 4:
+            while len(result) < 4:                                                        #Eingaben werden in Liste result zugefügt, bis sie die Länge 4 hat
                 for j in range(3):
                     GPIO.output(COL[j], 0)
 
                     for i in range(4):
                         if GPIO.input(ROW[i]) == 0:
                             time.sleep(0.02)
-                            result.extend([MATRIX[i][j]])
+                            result.extend([MATRIX[i][j]])                                  #über .extend Befehl wird in die Liste result geschrieben
                             print (result)
                             while(GPIO.input(ROW[i]) == 0):
-                                  time.sleep(0.02)
+                                  time.sleep(0.02)                                         #verhindert dass die gleich Zahl mehrfach ausgegeben wird
 
                     GPIO.output(COL[j], 1)
-            input_correct = (result == Code)
+            input_correct = (result == Code)                                               #while not Schleife wird unterbrochen, wenn die Eingabe dem generiertem Code entspricht
 
     # call function
     check_keypad()
     Display.Clear()
 #kp()
+#
