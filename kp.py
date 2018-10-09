@@ -1,4 +1,4 @@
-# Quelle: FEHLT NOCH, integer =/ Liste 
+# Quelle: https://www.youtube.com/watch?v=yYnX5QodqQ4, integer =/ Liste 
 # ab hier Zitat, auskommentierte Prints wurden nicht extra markiert
 #---------------------------------------------------------------------------------------------------------------------------
 import RPi.GPIO as GPIO
@@ -39,9 +39,7 @@ def kp():
 
 
     def check_keypad():
-        #ROW = [31, 33, 35, 37]
-        #COL = [36, 38, 40]
-        
+    
         MATRIX = [[1,2,3],
                   [4,5,6],
                   [7,8,9],
